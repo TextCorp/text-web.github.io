@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" sizes="31x27" href="notepad.png">
+  <title>Notepad</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f6f6f6;
+    }
+    
+    textarea {
+      width: 100%;
+      height: 300px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+      box-sizing: border-box;
+      margin-bottom: 20px;
+    }
+    
+    button {
+      padding: 10px 20px;
+      background-color: #0077ff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Notepad</h1>
+  <textarea id="not-alani" placeholder="Notunuzu buraya yazın..."></textarea>
+  <div>
+    <button id="kaydet">Kaydet</button>
+    <button id="ac">Aç</button>
+  </div>
+  
+  <script>
+    document.getElementById('kaydet').addEventListener('click', function() {
+      var icerik = document.getElementById('not-alani').value;
+      var dosya = new Blob([icerik], {type: 'text/plain'});
+      var link = document.createElement('a');
+      link.download = 'not_defteri.txt';
+      link.href = window.URL.createObjectURL(dosya);
+      link.click();
+    });
+
+    document.getElementById('ac').addEventListener('click', function() {
+      var dosyaSec = document.createElement('input');
+      dosyaSec.type = 'file';
+      dosyaSec.accept = 'text/plain';
+      dosyaSec.style.display = 'none';
+      dosyaSec.addEventListener('change', function() {
+        var dosya = dosyaSec.files[0];
+        var okuyucu = new FileReader();
+        okuyucu.onload = function() {
+          document.getElementById('not-alani').value = okuyucu.result;
+        }
+        okuyucu.readAsText(dosya);
+      });
+      dosyaSec.click();
+    });
+  </script>
+</body>
+</html>
