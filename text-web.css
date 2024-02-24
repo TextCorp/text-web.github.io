@@ -45,3 +45,25 @@ nav ul li a {
 nav ul li a:hover {
     color: #0077ff; /* Değişiklik için mouse üzerine geldiğinde farklı bir renk seçebilirsiniz */
 }
+
+
+
+button {
+    background-color: #0077ff; /* Renk */
+    border: none; /* Kenarlık */
+    color: white; /* Yazı rengi */
+    padding: 10px 20px; /* İç boşluklar */
+    text-align: center; /* Metin hizalama */
+    text-decoration: none; /* Metin süslemesi */
+    display: inline-block; /* Blok element olarak göster */
+    font-size: 16px; /* Yazı tipi boyutu */
+    margin: 4px 2px; /* Kenar boşlukları */
+    cursor: pointer; /* İmleç stilini belirle */
+    border-radius: 8px; /* Kenar yuvarlatma */
+    transition-duration: 0.4s; /* Geçiş süresi */
+  }
+
+  button:hover {
+    background-color: #0459b9; /* Hover durumunda arka plan rengi */
+    color: white; /* Hover durumunda yazı rengi */
+  }
