@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" sizes="31x31" href="alarm.png">
+    <title>Alarm</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            padding: 10px;
+            background-color: #f4f4f4;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        li:last-child {
+            border-bottom: none;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+        }
+
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+
+        .add-alarm-btn {
+            background-color: #28a745;
+        }
+
+        .add-alarm-btn:hover {
+            background-color: #218838;
+        }
+
+        .alarm-input {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Alarm</h1>
+        <form id="task-form">
+            <label for="task">Alarm Ekle:</label>
+            <input type="text" id="task" name="task" placeholder="Yeni Alarm...">
+            <button type="submit">Ekle</button>
+        </form>
+        <ul id="task-list">
+            <!-- Görevler buraya dinamik olarak eklenecek -->
+        </ul>
+        <h3>24 Şubat 2024</h3>
+    </div>
+    <audio id="alarm-sound" src="alarm.mp3"></audio>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.getElementById('task-form');
+            const input = document.getElementById('task');
+            const taskList = document.getElementById('task-list');
+            const alarmSound = document.getElementById('alarm-sound');
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const taskText = input.value.trim();
+                if (taskText !== '') {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <span>${taskText}</span>
+                        <button class="delete-btn">Sil</button>
+                        <input type="number" class="alarm-input" min="1" placeholder="Dakika">
+                        <button class="add-alarm-btn">Alarm Ekle</button>
+                    `;
+                    taskList.appendChild(li);
+                    input.value = '';
+                }
+            });
+
+            taskList.addEventListener('click', function(e) {
+                if (e.target.classList.contains('delete-btn')) {
+                    e.target.parentElement.remove();
+                } else if (e.target.classList.contains('add-alarm-btn')) {
+                    const parentLi = e.target.parentElement;
+                    const alarmInput = parentLi.querySelector('.alarm-input');
+                    const alarmMinutes = parseInt(alarmInput.value);
+                    if (!isNaN(alarmMinutes) && alarmMinutes > 0) {
+                        const alarmTime = new Date(Date.now() + alarmMinutes * 60000); // Convert minutes to milliseconds
+                        const currentTime = new Date();
+                        const timeDiff = alarmTime - currentTime;
+                        if (timeDiff > 0) {
+                            setTimeout(function() {
+                                alarmSound.play();
+                            }, timeDiff);
+                        } else {
+                            alert("Geçerli bir zaman seçin.");
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
