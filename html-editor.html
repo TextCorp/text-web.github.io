@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HTML Kod Editörü</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f0f0f0;
+    }
+    .container {
+        height: 800px;
+        width: 8000px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        display: flex;
+    }
+    #editor-container, #preview-container {
+        flex: 1;
+        padding: 20px;
+    }
+    #editor-container textarea {
+        width: 100%;
+        height: calc(100% - 150px);
+        border: none;
+        border-bottom: 1px solid #ddd;
+        padding: 10px;
+        resize: none;
+        outline: none;
+        color: #333; /* Metin rengi */
+        font-family: monospace; /* Monospace font kullanarak metni daha düzgün hale getir */
+    }
+    /* Renklendirme için eklediğim kodlar başlangıç */
+    .html-tag {
+        color: #0000ff; /* HTML etiketleri (ör: <html>, </html>) */
+    }
+    .attribute-name {
+        color: #008000; /* Attribut isimleri (ör: lang=) */
+    }
+    .attribute-value {
+        color: #ff4500; /* Attribut değerleri (ör: "en") */
+    }
+    .string {
+        color: #ffa500; /* Çift tırnak içindeki metinler */
+    }
+    /* Renklendirme için eklediğim kodlar son */
+    #preview-container {
+        background-color: #f9f9f9;
+        overflow-y: auto;
+        padding-right: 20px;
+    }
+    #html-output {
+        padding: 20px;
+    }
+    input[type="file"] {
+        display: none;
+    }
+
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div id="editor-container">
+        <textarea id="html-input" placeholder="HTML Kodunu Buraya Girin"></textarea>
+        <label for="file-input">Dosya Seç|</label>
+        <input type="file" id="file-input" accept=".html">
+        <label id="save-button">|Dosyayı Kaydet</label>
+    </div>
+
+    <div id="preview-container">
+        <div id="html-output"></div>
+    </div>
+</div>
+
+<script>
+    const htmlInput = document.getElementById('html-input');
+    const htmlOutput = document.getElementById('html-output');
+    const fileInput = document.getElementById('file-input');
+    const saveButton = document.getElementById('save-button');
+
+    htmlInput.addEventListener('input', updateOutput);
+    fileInput.addEventListener('change', handleFileSelect);
+
+    function updateOutput() {
+        const htmlCode = htmlInput.value;
+        htmlOutput.innerHTML = htmlCode;
+    }
+
+    function handleFileSelect(event) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function(event) {
+            const contents = event.target.result;
+            htmlInput.value = contents;
+            updateOutput();
+        };
+
+        reader.readAsText(file);
+    }
+
+    saveButton.addEventListener('click', saveFile);
+
+    function saveFile() {
+        const htmlContent = htmlInput.value;
+        const blob = new Blob([htmlContent], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'kodunuz.html';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    window.onload = function() {
+        const exampleHTML = `
+        <h1>hello world</h1>
+        `;
+        htmlInput.value = exampleHTML;
+        updateOutput();
+    };
+</script>
+
+</body>
+</html>
